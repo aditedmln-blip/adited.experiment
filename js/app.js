@@ -1,6 +1,6 @@
 /* =====================================================
    APP.JS — Monitoring Alat Berat
-   Dinas PUPRPKP Kabupaten Malinau
+   Dinas PUPRPERKIM Kabupaten Malinau
    Logika: GPS, Kamera, Offline Queue, Sync ke Sheets
    ===================================================== */
 
