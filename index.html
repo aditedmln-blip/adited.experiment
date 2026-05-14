@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1565C0">
+  <meta name="description" content="Monitoring Alat Berat Dinas PUPRPKP Kabupaten Malinau">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="AlBerat">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Monitoring Alat Berat</title>
+  <style>
+    :root {
+      --biru: #1565C0;
+      --biru-gelap: #0D47A1;
+      --biru-muda: #E3F2FD;
+      --hijau: #2E7D32;
+      --hijau-muda: #E8F5E9;
+      --merah: #C62828;
+      --merah-muda: #FFEBEE;
+      --oranye: #E65100;
+      --oranye-muda: #FFF3E0;
+      --abu: #546E7A;
+      --abu-muda: #ECEFF1;
+      --putih: #FFFFFF;
+      --teks: #1C2B33;
+      --teks-sekunder: #546E7A;
+      --border: #B0BEC5;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #F5F7FA;
+      color: var(--teks);
+      font-size: 15px;
+      padding-bottom: 80px;
+    }
+
+    /* === HEADER === */
+    .header {
+      background: var(--biru);
+      color: white;
+      padding: 14px 16px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .header h1 { font-size: 17px; font-weight: 600; }
+    .header p  { font-size: 12px; opacity: .85; }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,.2);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+    }
+    .status-kiri { display: flex; align-items: center; gap: 6px; }
+    #statusDot { width: 8px; height: 8px; border-radius: 50%; background: #4CAF50; }
+    #jumlahAntrian { font-size: 11px; opacity: .9; }
+
+    /* === OPERATOR CARD === */
+    .operator-card {
+      margin: 12px 14px 0;
+      background: white;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+    }
+    .operator-info p:first-child { font-size: 11px; color: var(--teks-sekunder); }
+    .operator-info p:last-child  { font-size: 15px; font-weight: 600; color: var(--biru); }
+    .operator-card button {
+      font-size: 12px; color: var(--biru); background: var(--biru-muda);
+      border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    }
+
+    /* === SECTION === */
+    .section {
+      background: white;
+      margin: 12px 14px 0;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .section-header {
+      background: var(--biru-muda);
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--biru-gelap);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-body { padding: 14px; }
+
+    /* === FORM FIELDS === */
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--teks-sekunder);
+      margin-bottom: 5px;
+    }
+    label .wajib { color: var(--merah); }
+    label .info { font-size: 11px; font-weight: 400; color: #90A4AE; }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      color: var(--teks);
+      background: white;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color .2s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--biru);
+    }
+    textarea { resize: vertical; min-height: 72px; }
+
+    .tanggal-display {
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      background: var(--abu-muda);
+      color: var(--teks);
+      font-weight: 500;
+    }
+
+    /* Grid dua kolom */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* === GPS BUTTON === */
+    .gps-wrapper { display: flex; gap: 8px; align-items: flex-start; }
+    .gps-wrapper input { flex: 1; }
+    #btnGPS {
+      padding: 11px 12px;
+      background: var(--biru);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #btnGPS:disabled { background: #90A4AE; }
+    #koordinatDisplay {
+      font-size: 12px;
+      color: var(--teks-sekunder);
+      margin-top: 5px;
+      font-family: monospace;
+    }
+
+    /* === FOTO === */
+    .foto-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .foto-box { position: relative; }
+    .foto-label-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 16px 8px;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--abu-muda);
+      text-align: center;
+      transition: all .2s;
+    }
+    .foto-label-btn:hover { border-color: var(--biru); background: var(--biru-muda); }
+    .foto-label-btn .ikon { font-size: 26px; }
+    .foto-label-btn span { font-size: 12px; font-weight: 500; color: var(--teks-sekunder); }
+    .foto-label-btn small { font-size: 10px; color: #90A4AE; }
+    .foto-input { display: none; }
+    .foto-preview {
+      display: none;
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 6px;
+    }
+    .foto-preview-info {
+      font-size: 10px;
+      color: var(--teks-sekunder);
+      margin-top: 3px;
+      text-align: center;
+    }
+
+    /* === KONDISI BADGES === */
+    .kondisi-select option[value="Normal"]       { color: #2E7D32; }
+    .kondisi-select option[value="Rusak Ringan"] { color: #E65100; }
+    .kondisi-select option[value="Rusak Berat"]  { color: #C62828; }
+
+    /* === PESAN STATUS === */
+    #pesanStatus {
+      display: none;
+      margin: 12px 14px 0;
+      padding: 11px 14px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .pesan-success { background: var(--hijau-muda); color: var(--hijau); border: 1px solid #A5D6A7; }
+    .pesan-error   { background: var(--merah-muda); color: var(--merah); border: 1px solid #EF9A9A; }
+    .pesan-warning { background: var(--oranye-muda); color: var(--oranye); border: 1px solid #FFCC80; }
+
+    /* === TOMBOL SIMPAN === */
+    .btn-simpan {
+      width: 100%;
+      padding: 16px;
+      background: var(--hijau);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .3px;
+      transition: background .2s;
+    }
+    .btn-simpan:hover  { background: #1B5E20; }
+    .btn-simpan:active { transform: scale(.99); }
+
+    .btn-sync {
+      width: 100%;
+      padding: 12px;
+      background: var(--biru-muda);
+      color: var(--biru);
+      border: 1.5px solid var(--biru);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    /* === FOOTER === */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #90A4AE;
+      padding: 20px 14px 0;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>&#9881; Monitoring Alat Berat</h1>
+      <p>Dinas PUPRPKP Kabupaten Malinau</p>
+    </div>
+  </div>
+  <div class="status-bar">
+    <div class="status-kiri">
+      <div id="statusDot"></div>
+      <span id="statusText">Memeriksa...</span>
+    </div>
+    <span id="jumlahAntrian">Memuat...</span>
+  </div>
+</div>
+
+<!-- OPERATOR -->
+<div class="operator-card">
+  <div class="operator-info">
+    <p>Nama Operator</p>
+    <p id="namaOperator">Memuat...</p>
+  </div>
+  <button onclick="gantiNamaOperator()">Ganti</button>
+</div>
+
+<!-- PESAN STATUS -->
+<div id="pesanStatus"></div>
+
+<!-- FORM -->
+<form id="formLaporan" novalidate>
+  <input type="hidden" id="tanggalValue">
+
+  <!-- SEKSI 1: INFO DASAR -->
+  <div class="section">
+    <div class="section-header">&#128197; Informasi Dasar</div>
+    <div class="section-body">
+      <div class="field">
+        <label>Tanggal</label>
+        <div class="tanggal-display" id="tanggalDisplay">--/--/----</div>
+      </div>
+      <div class="field">
+        <label>Nama Alat <span class="wajib">*</span></label>
+        <select id="namaAlat" required>
+          <option value="">-- Memuat daftar alat... --</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Lokasi Pekerjaan <span class="wajib">*</span></label>
+        <input type="text" id="lokasiPekerjaan" placeholder="Contoh: Ruas Jalan Long Loreh-Langap KM 12" required>
+      </div>
+      <div class="field">
+        <label>Koordinat GPS <span class="info">(opsional, sangat dianjurkan)</span></label>
+        <div class="gps-wrapper">
+          <input type="text" id="koordinatInput" placeholder="Otomatis dari GPS" readonly style="background:#f5f7fa">
+          <button type="button" id="btnGPS">&#127759; Ambil GPS</button>
+        </div>
+        <div id="koordinatDisplay">Belum diambil</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEKSI 2: WAKTU & JAM KERJA -->
+  <div class="section">
+    <div class="section-header">&#9201; Waktu &amp; Jam Kerja</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="field">
+          <label>Jam Mulai <span class="wajib">*</span></label>
+          <input type="time" id="jamMulai" required>
+        </div>
+        <div class="field">
+          <label>Jam Selesai <span class="wajib">*</span></label>
+          <input type="time" id="jamSelesai" required>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>HM Awal <span class="wajib">*</span> <span class="info">jam</span></label>
+          <input type="number" id="hmAwal" placeholder="Contoh: 2450.5" step="0.1" min="0" required>
+        </div>
+        <div class="field">
+          <label>HM Akhir <span class="info">jam</span></label>
+          <input type="number" id="hmAkhir" placeholder="Contoh: 2458.2" step="0.1" min="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEKSI 3: PEKERJAAN -->
+  <div class="section">
+    <div class="section-header">&#128736; Detail Pekerjaan</div>
+    <div class="section-body">
+      <div class="field">
+        <label>Kegiatan / Pekerjaan <span class="wajib">*</span></label>
+        <textarea id="kegiatan" placeholder="Jelaskan pekerjaan yang dilakukan. Contoh: Land clearing area persawahan, pembuatan badan jalan baru sepanjang 150m" required></textarea>
+      </div>
+      <div class="field">
+        <label>Volume Pekerjaan <span class="info">(opsional)</span></label>
+        <input type="text" id="volumePekerjaan" placeholder="Contoh: 250 m3 atau 1.5 km">
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>BBM Digunakan <span class="wajib">*</span></label>
+          <input type="number" id="bbmLiter" placeholder="Liter" step="0.5" min="0" required>
+        </div>
+        <div class="field">
+          <label>Kondisi Alat <span class="wajib">*</span></label>
+          <select id="kondisiAlat" class="kondisi-select" required>
+            <option value="">-- Pilih --</option>
+            <option value="Normal">Normal</option>
+            <option value="Rusak Ringan">Rusak Ringan</option>
+            <option value="Rusak Berat">Rusak Berat</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Kendala / Catatan <span class="info">(opsional)</span></label>
+        <textarea id="kendala" placeholder="Catat kendala, gangguan cuaca, atau hal lain yang perlu dilaporkan"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEKSI 4: FOTO -->
+  <div class="section">
+    <div class="section-header">&#128247; Dokumentasi Foto</div>
+    <div class="section-body">
+      <div class="foto-wrapper">
+        <div class="foto-box">
+          <label class="foto-label-btn" for="inputFotoAlat">
+            <div class="ikon">&#128663;</div>
+            <span>Foto Alat</span>
+            <small>Ketuk untuk kamera</small>
+          </label>
+          <input class="foto-input" type="file" id="inputFotoAlat" accept="image/*" capture="environment">
+          <img class="foto-preview" id="previewAlat" alt="Preview foto alat">
+          <div class="foto-preview-info" id="previewAlatInfo"></div>
+        </div>
+        <div class="foto-box">
+          <label class="foto-label-btn" for="inputFotoPekerjaan">
+            <div class="ikon">&#128679;</div>
+            <span>Foto Pekerjaan</span>
+            <small>Ketuk untuk kamera</small>
+          </label>
+          <input class="foto-input" type="file" id="inputFotoPekerjaan" accept="image/*" capture="environment">
+          <img class="foto-preview" id="previewPekerjaan" alt="Preview foto pekerjaan">
+          <div class="foto-preview-info" id="previewPekerjaanInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOMBOL AKSI -->
+  <div style="padding: 14px 14px 0;">
+    <button type="submit" class="btn-simpan">&#10003; SIMPAN LAPORAN</button>
+    <button type="button" class="btn-sync" id="btnSync" onclick="jalankanSync()">
+      &#8635; Sinkron Manual ke Google Sheets
+    </button>
+  </div>
+
+</form>
+
+<!-- FOOTER -->
+<div class="footer">
+  Dinas PUPRPKP Kabupaten Malinau &bull; Versi 1.0<br>
+  Data tersimpan lokal &bull; Sinkron otomatis saat online
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
