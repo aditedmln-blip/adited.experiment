@@ -1,6 +1,6 @@
 /* =====================================================
    SERVICE WORKER — Monitoring Alat Berat
-   Dinas PUPRPKP Kabupaten Malinau
+   Dinas PUPRPERKIM Kabupaten Malinau
    Versi: 1.0
    ===================================================== */
 
