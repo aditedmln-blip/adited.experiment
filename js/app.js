@@ -7,8 +7,8 @@
 /* ---- KONFIGURASI — WAJIB DIISI ---- */
 const CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzyKgNyI0HD3B4ub9JhklXGE_REK3JvfsPtqX8GbqMeh1kIpg2EGYhijtgaRISU5jZL/exec',
-  CLOUDINARY_CLOUD: 'GANTI_DENGAN_CLOUD_NAME_CLOUDINARY',
-  CLOUDINARY_PRESET: 'GANTI_DENGAN_UNSIGNED_PRESET',
+  CLOUDINARY_CLOUD: 'djc7hlhqy',
+  CLOUDINARY_PRESET: 'monitor_a2b',
   NAMA_DINAS: 'Dinas PUPRPERKIM Kabupaten Malinau',
   SYNC_INTERVAL_MS: 30000,   /* cek antrian setiap 30 detik */
   MAX_FOTO_PX: 1024,          /* resize foto max 1024px */
