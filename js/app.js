@@ -93,7 +93,10 @@ async function muatDaftarAlat() {
 
   /* Coba ambil data terbaru dari server */
   try {
-    const resp = await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=get_alat`, { signal: AbortSignal.timeout(8000) });
+    const resp = await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=get_alat`, {
+      redirect: 'follow',
+      signal: AbortSignal.timeout(8000)
+    });
     if (resp.ok) {
       const data = await resp.json();
       if (data.alat && data.alat.length > 0) {
@@ -309,8 +312,9 @@ async function jalankanSync() {
 
       const resp = await fetch(CONFIG.APPS_SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
         body: JSON.stringify(payload),
+        redirect: 'follow',
         signal: AbortSignal.timeout(15000)
       });
 
