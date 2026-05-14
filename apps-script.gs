@@ -1,6 +1,6 @@
 /* =====================================================
    APPS SCRIPT BACKEND — Monitoring Alat Berat
-   Dinas PUPRPKP Kabupaten Malinau
+   Dinas PUPRPERKIM Kabupaten Malinau
    
    CARA DEPLOY:
    1. Buka Google Sheets → Extensions → Apps Script
@@ -10,7 +10,7 @@
    5. Copy URL deployment → paste ke CONFIG di app.js
    ===================================================== */
 
-const SPREADSHEET_ID = 'GANTI_DENGAN_ID_SPREADSHEET_ANDA';
+const SPREADSHEET_ID = '1QgWETvw9ncSAN-rUg549bOO-v4-RyPZrk16t4dQYBJs';
 const SHEET_DATA     = 'DATA_HARIAN';
 const SHEET_ALAT     = 'DAFTAR_ALAT';
 const DRIVE_FOLDER   = 'FotoAlatBerat'; /* nama folder di Google Drive */
