@@ -224,7 +224,7 @@ function simpanLaporan() {
   const bbm = document.getElementById('bbmLiter').value;
   const kondisi = document.getElementById('kondisiAlat').value;
 
-  if (!namaAlat || !lokasi || !jamMulai || !jamSelesai || !hmAwal || !kegiatan || !kondisi) {
+  if (!namaAlat || !lokasi || !jamMulai || !jamSelesai || !hmAwal || !kegiatan || !kondisi || !gpsLat) {
     tampilkanPesan('Harap isi semua field wajib (bertanda *)', 'error');
     return;
   }
