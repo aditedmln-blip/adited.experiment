@@ -225,7 +225,7 @@ function simpanLaporan() {
   const kondisi = document.getElementById('kondisiAlat').value;
 
   if (!namaAlat || !lokasi || !jamMulai || !jamSelesai || !hmAwal || !kegiatan || !kondisi || !gpsLat) {
-    tampilkanPesan('Harap isi semua field wajib (bertanda *)', 'error');
+    tampilkanPesan('Harap isi semua field wajib (*) — termasuk Koordinat GPS', 'error');
     return;
   }
 
